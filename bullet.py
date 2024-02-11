@@ -1,16 +1,14 @@
 import pygame
 from pygame.sprite import Sprite
 
-
 class Bullet(Sprite):
     def __init__(self, SW):
-        super().__init__
+        super().__init__()
         self.screen = SW.screen
         self.bullet_width = 3
-        self.bullet_height = 10
-        self.bullet_color = (60, 60, 60)
+        self.bullet_height = 15
         self.bullet_speed = 1.0
-
+        self.bullet_color = (60, 60, 60)
         self.rect = pygame.Rect(0, 0, self.bullet_width, self.bullet_height)
         self.rect.midtop = SW.ship.rect.midtop
         self.y = float(self.rect.y)
