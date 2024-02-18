@@ -4,6 +4,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 
+WIDTH = 1920
 HEIGHT = 1080
 BACKGROUNG = (230, 230, 230)
 
@@ -49,19 +50,39 @@ class StarWars:
     def _fire_bullet(self):
         new_bullet = Bullet(self)
         self.bullets.add(new_bullet)
-    def create_alien(self, alien_number):
+
+    def create_alien(self, alien_number, row_number):
         alien = Alien(self)
-        alien_width = alien.rect.width
+        alien_width, alien_height = alien.rect.size
         alien.x =  alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
+        alien.rect.y = alien.rect.height + 2*alien.rect.height * row_number
         self.aliens.add(alien)
+
     def _create_fleet(self):
         alien = Alien(self)
-        alien_width = alien.rect.width
-        available_space = HEIGHT - (2*alien_width)
+        alien_width, alien_height = alien.rect.size
+        available_space = WIDTH - (2*alien_width)
         number_aliens = available_space // (2 * alien_width)
-        for alien_number in range(number_aliens):
-            self.create_alien(alien_number)
+        ship_height = self.ship.rect.height
+        available_space_y = (HEIGHT - (3*alien_height) - ship_height)
+        number_rows = available_space_y // (3*alien_height)
+        for row_number in range(number_rows):
+            for alien_number in range(number_aliens):
+                self.create_alien(alien_number, row_number)
+
+    def update_alien(self):
+        self.aliens.update()
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            print("EZ FREE FOR ME")
+
+    def _update_bullets(self):
+        self.bullets.update() #gg wp
+        if not self.aliens:
+            self.bullets.empty()
+            self._create_fleet()
+
+        pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)                    
     def run_game(self):
         """
         Запуск програми
@@ -69,7 +90,8 @@ class StarWars:
         while True:
             self._check_events()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
+            #self.update_alien()
             self._update_screen()
 
 

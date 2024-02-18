@@ -9,19 +9,18 @@ class Alien(Sprite):
         self.image =  pygame.image.load("images\spirit_breaker.png")
         self.rect = self.image.get_rect()
         self.screen_rect = SW.screen.get_rect()
-        #self.alien_speed = 0.5
+        self.alien_speed = 0.5
 
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
         self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
 
-        """def update_alien(self):
-        if self.rect.bottom < self.screen_rect.bottom:
-            self.y +=  self.alien_speed
-        if self.rect.bottom == self.screen_rect.bottom:
-            self.screen.blit(self.image,self.rect)
-        self.rect.y = self.y"""
+    def update_alien(self):
+        self.y +=  self.alien_speed
+        self.rect.y = self.y
 
-    """    def blit_alien(self):
-        self.screen.blit(self.image, self.rect)"""
+    def check_edges(self):
+        if self.rect.height >= self.screen_rect.bottom:
+            return True    
 
